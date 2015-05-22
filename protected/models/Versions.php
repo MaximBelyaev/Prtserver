@@ -30,14 +30,43 @@ class Versions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, dir, status', 'required'),
+			array('name, status', 'required'),
 			array('name', 'length', 'max'=>31),
-			array('dir', 'length', 'max'=>511),
-			array('status', 'length', 'max'=>16),
+			array('name', 'version'),
+			array('status', 'numerical'),
+			array('date', 'now'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('v_id, name, dir, status', 'safe', 'on'=>'search'),
+			array('v_id, name, dir, status, date', 'safe', 'on'=>'search'),
 		);
+	}
+
+	public function now($attribute, $params)
+	{
+		$this->$attribute = time();
+	}
+
+	public function version($attribute, $params)
+	{
+		if (preg_match("/[а-яА-Я]/", $this->$attribute)) {
+			$this->addError($attribute, 'You cannot use cyrillic symbols');
+		}
+		$this->$attribute = trim(trim($this->$attribute),'.');
+	}
+
+	public function afterValidate()
+	{
+		parent::afterValidate();
+		$statuses = Yii::app()->controller->getStatusesByLang('en');
+		$this->dir = $statuses[$this->status] . '/' . $this->name;
+		return true;
+	}
+
+	public function afterSave()
+	{
+		if ( !is_dir($_SERVER['DOCUMENT_ROOT'] . $this->dir) ) {
+			mkdir($_SERVER['DOCUMENT_ROOT'] . $this->dir, 0777, true);
+		}
 	}
 
 	/**
@@ -58,10 +87,11 @@ class Versions extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'v_id' => 'V',
-			'name' => 'Name',
-			'dir' => 'Dir',
-			'status' => 'Status',
+			'v_id' => 'ID',
+			'name' => 'Имя',
+			'dir' => 'Путь к файлам',
+			'status' => 'Статус',
+			'date' => 'Дата',
 		);
 	}
 
@@ -103,4 +133,11 @@ class Versions extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public function getStatusNameByLang($lang)
+	{
+		$statuses = Yii::app()->controller->getStatusesByLang($lang);
+		return $statuses[$this->status];
+	}
+
 }

@@ -57,6 +57,7 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'api/<action:\w+>/<license:\w+>'=>'api/<action>',
 			),
 		),
 		'log'=>array(

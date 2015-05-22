@@ -13,68 +13,75 @@
 	// There is a call to performAjaxValidation() commented in generated controller code.
 	// See class documentation of CActiveForm for details on this.
 	'enableAjaxValidation'=>false,
+	'htmlOptions' => array(
+		'class'=>'form-horizontal',
+	),
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Обязательные поля <span class="required">*</span></p>
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'name'); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'name', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+			<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
+			<?php echo $form->error($model,'name'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>255)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'email', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'email'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'skype'); ?>
-		<?php echo $form->textField($model,'skype',array('size'=>60,'maxlength'=>255)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'skype', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->textField($model,'skype',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'skype'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'vk'); ?>
-		<?php echo $form->textField($model,'vk',array('size'=>60,'maxlength'=>255)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'vk', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->textField($model,'vk',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'vk'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'fb'); ?>
-		<?php echo $form->textField($model,'fb',array('size'=>60,'maxlength'=>255)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'fb', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->textField($model,'fb',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'fb'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'reg_date'); ?>
-		<?php echo $form->textField($model,'reg_date'); ?>
-		<?php echo $form->error($model,'reg_date'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'license'); ?>
-		<?php echo $form->textField($model,'license',array('size'=>16,'maxlength'=>16)); ?>
-		<?php echo $form->error($model,'license'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'status'); ?>
-		<?php echo $form->textField($model,'status',array('size'=>16,'maxlength'=>16)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'status', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->dropDownList($model,'status', Yii::app()->controller->getStatusesByLang('ru'), array( 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'status'); ?>
+		</div>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'comment'); ?>
-		<?php echo $form->textField($model,'comment',array('size'=>60,'maxlength'=>4095)); ?>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'comment', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+		<?php echo $form->textArea($model,'comment',array('size'=>60,'maxlength'=>4095, 'class'=>"form-control")); ?>
 		<?php echo $form->error($model,'comment'); ?>
+		</div>
 	</div>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	<div class="form-group buttons">
+		<div class="col-sm-2">
+			<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', array('class'=>'btn btn-success')); ?>
+		</div>
 	</div>
 
 <?php $this->endWidget(); ?>

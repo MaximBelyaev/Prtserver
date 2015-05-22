@@ -1,6 +1,6 @@
 <?php
 
-class CustomersController extends CController
+class CustomersController extends MainController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -28,33 +28,23 @@ class CustomersController extends CController
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
+				// 'actions'=>array('index','view'),
+				// 'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
+				// 'actions'=>array('create','update'),
+				// 'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
+				// 'actions'=>array('admin','delete'),
+				// 'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
-				'users'=>array('*'),
+				// 'users'=>array('*'),
 			),
 		);
 	}
 
-	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
 
 	/**
 	 * Creates a new model.
@@ -70,8 +60,9 @@ class CustomersController extends CController
 		if(isset($_POST['Customers']))
 		{
 			$model->attributes=$_POST['Customers'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->c_id));
+			if($model->save()){
+				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('create',array(
@@ -94,8 +85,9 @@ class CustomersController extends CController
 		if(isset($_POST['Customers']))
 		{
 			$model->attributes=$_POST['Customers'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->c_id));
+			if($model->save()){
+				$this->redirect(array('index'));
+			}
 		}
 
 		$this->render('update',array(
@@ -122,7 +114,6 @@ class CustomersController extends CController
 	 */
 	public function actionIndex()
 	{
-		echo $this->layout;
 		$dataProvider=new CActiveDataProvider('Customers');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,

@@ -1,6 +1,6 @@
 <?php
 
-class VersionsController extends CController
+class VersionsController extends MainController
 {
 
 	/**
@@ -23,7 +23,7 @@ class VersionsController extends CController
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -41,17 +41,6 @@ class VersionsController extends CController
 	}
 
 	/**
-	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
-	 */
-	public function actionView($id)
-	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
@@ -66,7 +55,7 @@ class VersionsController extends CController
 		{
 			$model->attributes=$_POST['Versions'];
 			if($model->save()){
-				$this->redirect(array('view','id'=>$model->v_id));
+				$this->redirect(array('index'));
 			}
 		}
 
@@ -91,7 +80,7 @@ class VersionsController extends CController
 		{
 			$model->attributes=$_POST['Versions'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->v_id));
+				$this->redirect(array('index'));
 		}
 
 		$this->render('update',array(

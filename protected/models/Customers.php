@@ -36,15 +36,31 @@ class Customers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, email, skype, vk, fb, reg_date, license, status, comment', 'required'),
-			array('reg_date', 'numerical', 'integerOnly'=>true),
+			array('name, status', 'required'),
+			array('reg_date', 'now'),
 			array('name, email, skype, vk, fb', 'length', 'max'=>255),
-			array('license, status', 'length', 'max'=>16),
+			array('license', 'length', 'max'=>32),
 			array('comment', 'length', 'max'=>4095),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('c_id, name, email, skype, vk, fb, reg_date, license, status, comment', 'safe', 'on'=>'search'),
 		);
+	}
+
+	public function now($attribute, $params)
+	{
+		$this->$attribute = time();
+	}
+
+	public function afterSave()
+	{
+		parent::afterSave();
+		if ($this->license == '') {
+			$this->license = md5('prt_' . $this->c_id);
+			$this->isNewRecord = false;
+			$this->save();
+		}
+		return true;
 	}
 
 	/**
@@ -66,15 +82,15 @@ class Customers extends CActiveRecord
 	{
 		return array(
 			'c_id' => 'C',
-			'name' => 'Name',
+			'name' => 'Имя',
 			'email' => 'Email',
 			'skype' => 'Skype',
-			'vk' => 'Vk',
-			'fb' => 'Fb',
-			'reg_date' => 'Reg Date',
-			'license' => 'License',
-			'status' => 'Status',
-			'comment' => 'Comment',
+			'vk' => 'VK',
+			'fb' => 'FB',
+			'reg_date' => 'Дата регистрации',
+			'license' => 'Лицензия',
+			'status' => 'Статус',
+			'comment' => 'Комментарий',
 		);
 	}
 
@@ -121,5 +137,10 @@ class Customers extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	public static function findByLicense($license)
+	{
+		return Customers::model()->find("license='$license'");
 	}
 }
