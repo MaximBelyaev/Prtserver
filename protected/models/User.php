@@ -8,7 +8,7 @@
  * @property string $email
  * @property string $profile
  */
-class User extends Model
+class User extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -27,22 +27,15 @@ class User extends Model
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, email', 'required'),
-			array('username, password, email', 'length', 'max'=>128),
-			array('profile', 'safe'),
+			array('username, password', 'required'),
+			array('username', 'length', 'max' => 150),
+			array('password', 'length', 'max' => 255),
 		);
 	}
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
+	public function tableName()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'posts' => array(self::HAS_MANY, 'Post', 'author_id'),
-		);
+		return 'user';
 	}
 
 	/**
@@ -52,10 +45,8 @@ class User extends Model
 	{
 		return array(
 			'id' => 'Id',
-			'username' => 'Username',
-			'password' => 'Password',
-			'email' => 'Email',
-			'profile' => 'Profile',
+			'username' => 'Логин',
+			'password' => 'Пароль',
 		);
 	}
 
@@ -66,7 +57,7 @@ class User extends Model
 	 */
 	public function validatePassword($password)
 	{
-		return CPasswordHelper::verifyPassword($password,$this->password);
+		return CPasswordHelper::verifyPassword($password,$this->hashPassword($this->password));
 	}
 
 	/**

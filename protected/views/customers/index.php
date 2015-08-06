@@ -6,13 +6,14 @@
 
 <h1>Покупатели</h1>
 
-<?php echo Chtml::link('Добавить нового','/customers/create', array('class'=>'btn btn-primary')); ?>
+<?php echo Chtml::link('Добавить 200 лицензионных кодов','/customers/addcodes', array('class'=>'btn btn-primary')); ?>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id' => 'user-grid',
 	'dataProvider' => $dataProvider,
 	'columns' => array(
 		'c_id',
+		'site',
 		'name',
 		'email',
 		'skype',

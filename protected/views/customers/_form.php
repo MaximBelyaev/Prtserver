@@ -29,6 +29,13 @@
 			<?php echo $form->error($model,'name'); ?>
 		</div>
 	</div>
+	<div class="form-group">
+		<?php echo $form->labelEx($model,'site', array('class'=>'col-sm-2')); ?>
+		<div class='col-sm-10'>
+			<?php echo $form->textField($model,'site',array('size'=>60,'maxlength'=>255, 'class'=>"form-control")); ?>
+			<?php echo $form->error($model,'site'); ?>
+		</div>
+	</div>
 
 	<div class="form-group">
 		<?php echo $form->labelEx($model,'email', array('class'=>'col-sm-2')); ?>

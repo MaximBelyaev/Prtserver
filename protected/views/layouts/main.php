@@ -23,6 +23,12 @@
 						<li>
 							<?= Chtml::link("Версии", array( 'versions/index' ))?>
 						</li>
+						<li>
+							<?= Chtml::link("Загрузки", array( 'VersionsDownloads/index' ))?>
+						</li>
+						<li>
+							<?= Chtml::link("Войти", array( 'login' ))?>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#">Link</a></li>

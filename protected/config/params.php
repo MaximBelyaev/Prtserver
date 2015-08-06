@@ -28,5 +28,5 @@ return array(
 		)
 	),
 
-	'versionsDir' => '/versions/',
+	'versionsDir' => 'versions/',
 );

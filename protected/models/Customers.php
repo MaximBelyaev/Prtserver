@@ -36,14 +36,13 @@ class Customers extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, status', 'required'),
 			array('reg_date', 'now'),
-			array('name, email, skype, vk, fb', 'length', 'max'=>255),
+			array('name, site, email, skype, vk, fb', 'length', 'max'=>255),
 			array('license', 'length', 'max'=>32),
 			array('comment', 'length', 'max'=>4095),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('c_id, name, email, skype, vk, fb, reg_date, license, status, comment', 'safe', 'on'=>'search'),
+			array('c_id, name, site, email, skype, vk, fb, reg_date, license, status, comment', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +82,7 @@ class Customers extends CActiveRecord
 		return array(
 			'c_id' => 'C',
 			'name' => 'Имя',
+			'site' => 'Домен',
 			'email' => 'Email',
 			'skype' => 'Skype',
 			'vk' => 'VK',
@@ -114,6 +114,7 @@ class Customers extends CActiveRecord
 
 		$criteria->compare('c_id',$this->c_id);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('site',$this->site,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('skype',$this->skype,true);
 		$criteria->compare('vk',$this->vk,true);

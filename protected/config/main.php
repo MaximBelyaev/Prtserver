@@ -35,17 +35,12 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
-		'db'=>array(
-			'connectionString' => 'sqlite:protected/data/blog.db',
-			'tablePrefix' => 'tbl_',
-		),
 		// uncomment the following to use a MySQL database
-
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=prtserver',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '',
+			'password' => ($_SERVER['HTTP_HOST']=='prt.shvets')?'':'bo0aszw7fa',
 			'charset' => 'utf8',
 		),
 		'errorHandler'=>array(
@@ -57,6 +52,8 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+				'api/check/<checkString:\w+>'=>'api/check',
+				'api/activate/<licenseString:\w+>'=>'api/activate',
 				'api/<action:\w+>/<license:\w+>'=>'api/<action>',
 			),
 		),
