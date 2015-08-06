@@ -107,8 +107,13 @@ class CustomersController extends MainController
 	 */
 	public function actionIndex()
 	{
+		$allCustomers = Customers::model()->findAll();
+		$activatedCustomers = new CActiveDataProvider('Customers', array('criteria'=>array(
+			'condition'=>'status = 1')));
 		$dataProvider=new CActiveDataProvider('Customers');
 		$this->render('index',array(
+			'allCustomers'=>$allCustomers,
+			'activatedCustomers'=>$activatedCustomers,
 			'dataProvider'=>$dataProvider,
 		));
 	}
