@@ -39,7 +39,7 @@
 		<div class="container" id="page">
 			<div class="row">
 				<div class="col-md-10"><?php echo $content; ?></div>
-				<div class="col-md-2">.col-md-2</div>
+				<div class="col-md-2"></div>
 			</div>
 		</div><!-- page -->
 	</body>

@@ -10,7 +10,7 @@ return array(
 	'name'=>'Система учета продаж систем учета партнеров',
 
 	// preloading 'log' component
-	'preload'=>array('log'),
+	'preload'=>array('debug', 'log'),
     //language for project
     'sourceLanguage'=>'en',
     'language'=>'ru',
@@ -31,6 +31,9 @@ return array(
 
 	// application components
 	'components'=>array(
+        'debug' => array(
+            'class' => 'ext.yii2-debug.Yii2Debug',
+        ),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -40,12 +43,12 @@ return array(
 			'connectionString' => 'mysql:host=localhost;dbname=prtserver',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => ($_SERVER['HTTP_HOST']=='prt.shvets')?'':'bo0aszw7fa',
+			'password' => ($_SERVER['HTTP_HOST']=='prtserver.loc')?'':'bo0aszw7fa',
 			'charset' => 'utf8',
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
-			'errorAction'=>'site/error',
+			// 'errorAction'=>'site/error',
 		),
 		'urlManager'=>array(
 			'showScriptName' => false,
@@ -58,23 +61,23 @@ return array(
 			),
 		),
 		'log'=>array(
-			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
-			),
+			'class'	 => 'CLogRouter',
+            'routes'=>array(
+                array(
+                    'class'=>'CFileLogRoute',
+                    'levels'=>'error, warning',
+                ),
+                // uncomment the following to show log messages on web pages
+                /*
+                array(
+                    'class'=>'CWebLogRoute',
+                ),
+                */
+            ),
 		),
 	),
 
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
-	'params'=>require(dirname(__FILE__).'/params.php'),
+	'params' => require(dirname(__FILE__).'/params.php'),
 );

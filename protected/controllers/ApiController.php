@@ -6,9 +6,12 @@ class ApiController extends MainController
 	public function actionUpdate($license)
 	{
 		$customer = Customers::findByLicense($license);
+
 		if (!is_null($customer)) {
+
 			$version = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
 			if (!is_null($version)) {
+
 				$vdir = Yii::app()->params['versionsDir'];
 				$archiveName = 'prt+' . $customer->c_id
 							. '_s+' . $version->getStatusNameByLang('en')
@@ -18,6 +21,7 @@ class ApiController extends MainController
 
 				$zip->open( 'assets/' . $archiveName, Zip::CREATE );
 				$zip->addDirectory( $vdir . $version->dir, $vdir . $version->dir );
+
 				if($zip->close())
 				{
 					$vd = new VersionsDownloads();
@@ -37,28 +41,32 @@ class ApiController extends MainController
 	public function actionLastupdate($license)
 	{
 		$customer = Customers::findByLicense($license);
-		if (!is_null($customer)) {
+		if ( !is_null($customer) ) {
+
+			$last_v = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
+			$last_v = $last_v->name;
+
+			$meta = [
+				"licence"			=> $license,
+				"latest_version"	=> $last_v,
+			];
+			
 			$vd = $customer->versionsDownloads;
-			if (!is_null($vd)) {
+			if (!empty($vd)) {
 				$vd = end($vd);
 				$v  = $vd->v;
-				$last_v = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
-				$last_v = $last_v->name;
-				$meta = [
-					"licence"=>$license,
-					"current_version"=>$v->name,
-					"current_status"=>$v->getStatusNameByLang('en'),
-					"latest_version"=>$last_v,
-				];
-				echo json_encode($meta);
-				
-			} else {
-				echo 0;
+				$meta["current_version"] = ($v)?$v->name:'';
+				$meta["current_status"]	 = ($v)?$v->getStatusNameByLang('en'):'';
 			}
+
+			echo json_encode($meta);
+			
 		} else {
 			echo 0;
 		}
+		
 	}
+
 
 	protected function sendFile($file)
 	{
@@ -83,13 +91,32 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionCheck($domain)
+	public function actionActivate($licenseString)
 	{
-		// Проверяем, совпадает ли код в ссылке с существующими лицензиями пользователей
+		$parts = explode('hostname', $licenseString);
 		$customersList = Customers::model()->findAll();
 		foreach ($customersList as $customer)
 		{
-			if ($customer['site'] === $domain)
+			if ($customer->license == $parts[0])
+			{
+				$sql = "UPDATE customers SET site = '" . $parts[1] . "' WHERE license = '" . $parts[0] . "' AND site IS NULL OR LENGTH(site)=0";
+       			$connection=Yii::app()->db;
+        		$command=$connection->createCommand($sql);
+        		if($command->execute())
+        		{
+        			echo 'success';
+        		}
+			}
+		}
+	}
+
+	public function actionCheck($checkString)
+	{
+		$customersList = Customers::model()->findAll();
+		$parts = explode('hostname', $checkString);
+		foreach ($customersList as $customer)
+		{
+			if ($customer->license === $parts[0] and $customer->site === $parts[1])
 			{
 				echo "exists";
 			}
@@ -98,5 +125,11 @@ class ApiController extends MainController
 				echo "doesn't exist";
 			}
 		}
+	}
+
+	public function actionTests ()
+	{
+		$file = file_get_contents('tests.php', FILE_USE_INCLUDE_PATH);
+		echo $file;
 	}
 }

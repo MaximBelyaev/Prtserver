@@ -25,7 +25,21 @@ class SiteController extends MainController
 
 	public function actionIndex()
 	{
-		$this->render('index');
+        $customer = new Customers('search');
+        $customer->unsetAttributes();  // clear any default values
+        $this->performAjaxValidation($customer);
+        if(isset($_GET['Customers'])) {
+            $customer->attributes=$_GET['Customers'];
+        }
+
+        $allCustomers = Customers::model()->findAll();
+        $activatedCustomers = new CActiveDataProvider('Customers', array('criteria'=>array(
+            'condition'=>'status = 1')));
+        $this->render('index',array(
+            'customer' => $customer,
+            'allCustomers'=>$allCustomers,
+            'activatedCustomers'=>$activatedCustomers,
+        ));
 	}
 
 	/**
@@ -40,6 +54,52 @@ class SiteController extends MainController
 	    	else
 	        	$this->render('error', $error);
 	    }
+	}
+
+	public function actionUpdate($id)
+	{
+		$model=$this->loadModel($id);
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Customers']))
+		{
+			$model->attributes=$_POST['Customers'];
+			if($model->save()){
+				$this->redirect(array('index'));
+			}
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
+
+	public function loadModel($id)
+	{
+		$model=Customers::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+
+    protected function performAjaxValidation($model)
+    {
+        if(isset($_POST['ajax']) && $_POST['ajax']==='user-grid')
+        {
+            echo CActiveForm::validate($model);
+            Yii::app()->end();
+        }
+    }
+
+	public function actionDelete($id)
+	{
+		$this->loadModel($id)->delete();
+
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
 	/**
