@@ -32,12 +32,12 @@ class Versions extends CActiveRecord
 		return array(
 			array('name, status', 'required'),
 			array('name', 'length', 'max'=>31),
+			array('db_update, db_revert', 'length', 'max' => 8191),
 			array('name', 'version'),
 			array('status', 'numerical'),
-			array('date', 'now'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('v_id, name, dir, status, date', 'safe', 'on'=>'search'),
+			array('v_id, name, db_update, db_revert, dir, status, date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +59,16 @@ class Versions extends CActiveRecord
 		parent::afterValidate();
 		$statuses = Yii::app()->controller->getStatusesByLang('en');
 		$this->dir = $statuses[$this->status] . '/' . $this->name;
+		return true;
+	}
+
+	public function beforeSave()
+	{
+		parent::beforeSave();
+
+		if ($this->isNewRecord) {
+			$this->date = time();
+		}
 		return true;
 	}
 
@@ -90,6 +100,8 @@ class Versions extends CActiveRecord
 			'v_id' => 'ID',
 			'name' => 'Имя',
 			'dir' => 'Путь к файлам',
+			'db_update' => 'БД обновление',
+			'db_revert' => 'БД отмена', 
 			'status' => 'Статус',
 			'date' => 'Дата',
 		);

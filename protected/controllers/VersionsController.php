@@ -71,14 +71,14 @@ class VersionsController extends MainController
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Versions']))
 		{
-			$model->attributes=$_POST['Versions'];
+			$model->attributes = $_POST['Versions'];
 			if($model->save())
 				$this->redirect(array('index'));
 		}
