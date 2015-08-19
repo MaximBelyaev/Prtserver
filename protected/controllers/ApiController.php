@@ -4,7 +4,7 @@ class ApiController extends MainController
 {
 
 
-	public function actionDbUpdate($license)
+	public function actionDbUpdate( $license )
 	{
 		$customer = Customers::findByLicense($license);
 
@@ -34,7 +34,7 @@ class ApiController extends MainController
 	}
 
 
-	public function actionUpdate($license)
+	public function actionUpdate( $license )
 	{
 		$customer = Customers::findByLicense($license);
 
@@ -69,7 +69,7 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionLastupdate($license)
+	public function actionLastupdate( $license )
 	{
 		$customer = Customers::findByLicense($license);
 		if ( !is_null($customer) ) {
@@ -99,7 +99,7 @@ class ApiController extends MainController
 	}
 
 
-	protected function sendFile($file)
+	protected function sendFile( $file )
 	{
 		if (file_exists($file)) {
 			// сбрасываем буфер вывода PHP, чтобы избежать переполнения памяти выделенной под скрипт
@@ -122,26 +122,28 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionActivate($licenseString)
+	public function actionActivate( $licenseString )
 	{
 		$parts = explode('hostname', $licenseString);
-		$customersList = Customers::model()->findAll();
+		$customersList = Customers::model()->findAll("site=''");
 		foreach ($customersList as $customer)
 		{
 			if ($customer->license == $parts[0])
 			{
-				$sql = "UPDATE customers SET site = '" . $parts[1] . "' WHERE license = '" . $parts[0] . "' AND site IS NULL OR LENGTH(site)=0";
-       			$connection=Yii::app()->db;
-        		$command=$connection->createCommand($sql);
-        		if($command->execute())
+				$sql = "UPDATE customers SET site = '" . $parts[1] . "' WHERE license = '" . $parts[0] . "' AND (site IS NULL OR LENGTH(site)=0)";
+       			$connection = Yii::app()->db;
+        		$command	= $connection->createCommand($sql);
+        		if( $command->execute() )
         		{
         			echo 'success';
+        		} else {
+        			echo 'fail';
         		}
 			}
 		}
 	}
 
-	public function actionCheck($checkString)
+	public function actionCheck( $checkString )
 	{
 		$customersList = Customers::model()->findAll();
 		$parts = explode('hostname', $checkString);
