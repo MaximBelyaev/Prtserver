@@ -32,7 +32,7 @@ class CustomersController extends MainController
 					'users'=>array('@'),
 			),
 			array('deny',
-				'actions'=>array('create','update', 'index'),
+				'actions'=>array('create','update', 'index', 'addCode', 'addCodes'),
 				'users'=>array('?'),
 			),
 		);
@@ -107,15 +107,15 @@ class CustomersController extends MainController
 	 */
 	public function actionIndex()
 	{
-		$allCustomers = Customers::model()->findAll();
-		$activatedCustomers = new CActiveDataProvider('Customers', array('criteria'=>array(
-			'condition'=>'status = 1')));
-		$dataProvider=new CActiveDataProvider('Customers');
-		$this->render('index',array(
-			'allCustomers'=>$allCustomers,
-			'activatedCustomers'=>$activatedCustomers,
-			'dataProvider'=>$dataProvider,
-		));
+        $customer = new Customers('search');
+        $customer->unsetAttributes();  // clear any default values
+        $this->performAjaxValidation($customer);
+        if(isset($_GET['Customers'])) {
+            $customer->attributes=$_GET['Customers'];
+        }
+        $this->render('index',array(
+            'customer' => $customer,
+        ));
 	}
 
 	/**
@@ -135,13 +135,28 @@ class CustomersController extends MainController
 
 	public function actionAddcodes()
 	{
+        $models = [];
 		for ($i = 1; $i <= 200; $i++)
 		{
 			$model=new Customers();
 			$model->status = 'not_activated';
 			$model->save();
+            $models[] = $model->license;
 		}
+        echo json_encode(array(
+            'models' => $models,
+        ));
 	}
+
+    public function actionAddcode()
+    {
+            $model=new Customers();
+            $model->status = 'not_activated';
+            $model->save();
+            echo json_encode(array(
+            'code'=> $model->license,
+        ));
+    }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

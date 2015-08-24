@@ -22,8 +22,6 @@
 			'name'=>'date',
 			'value'=>'date("d-m-Y", $data->date)',
 		),
-		'db_update',
-		'db_revert',
 		array(
 			'header'=>'Действия',
 			'class'=>'CButtonColumn',

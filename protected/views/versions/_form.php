@@ -38,23 +38,6 @@
 		</div>
 	</div>
 
-
-	<div class="form-group">
-		<?php echo $form->labelEx($model,'db_update', array('class'=>'col-sm-2')); ?>
-		<div class='col-sm-10'>
-			<?php echo $form->textArea($model,'db_update',array('class'=>"form-control")); ?>
-			<?php echo $form->error($model,'db_update'); ?>
-		</div>
-	</div>
-	
-	<div class="form-group">
-		<?php echo $form->labelEx($model,'db_revert', array('class'=>'col-sm-2')); ?>
-		<div class='col-sm-10'>
-			<?php echo $form->textArea($model,'db_revert',array('class'=>"form-control")); ?>
-			<?php echo $form->error($model,'db_revert'); ?>
-		</div>
-	</div>
-
 	<div class="form-group buttons">
 		<div class="col-sm-2">
 			<?php echo CHtml::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', array('class'=>'btn btn-success')); ?>

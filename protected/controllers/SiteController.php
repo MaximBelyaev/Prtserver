@@ -6,6 +6,15 @@ class SiteController extends MainController
 	/**
 	 * Declares class-based actions.
 	 */
+
+    public function filters()
+    {
+        return array(
+            'accessControl', // perform access control for CRUD operations
+            'postOnly + delete', // we only allow deletion via POST request
+        );
+    }
+
 	public function actions()
 	{
 		return array(
@@ -21,6 +30,20 @@ class SiteController extends MainController
 			),
 		);
 	}
+
+    public function accessRules()
+    {
+        return array(
+            array('allow',
+                'actions'=>array('create', 'update', 'index', 'changePassword'),
+                'users'=>array('@'),
+            ),
+            array('deny',
+                'actions'=>array('create', 'update', 'index', 'changePassword', 'logout'),
+                'users'=>array('?'),
+            ),
+        );
+    }
 
 
 	public function actionIndex()
@@ -145,6 +168,19 @@ class SiteController extends MainController
 		}
 		$this->render('login',array('model'=>$model));
 	}
+
+    public function actionChangePassword()
+    {
+        $model = User::model()->findByPk(Yii::app()->user->id);
+        if(isset($_POST['User']))
+        {
+            $model->attributes=$_POST['User'];
+            if($model->update()){
+                $this->redirect(array('site/index'));
+            }
+        }
+        $this->render('changePassword',array('model'=>$model));
+    }
 
 	/**
 	 * Logs out the current user and redirect to homepage.

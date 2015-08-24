@@ -3,46 +3,15 @@
 class ApiController extends MainController
 {
 
-
-	public function actionDbUpdate( $license )
+	public function actionUpdate($license)
 	{
 		$customer = Customers::findByLicense($license);
 
 		if (!is_null($customer)) {
 
 			$version = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
-
 			if (!is_null($version)) {
 
-				if ( $version->db_update ) {
-					echo json_encode(array(
-						'status' => 'has_update', 
-						'db_update' => $version->db_update,
-						'db_revert' => $version->db_revert,
-					));
-				} else {
-					echo json_encode(array(
-						'status' => 'no_update'
-					));
-
-				}
-
-			}
-
-		}
-
-	}
-
-
-	public function actionUpdate( $license )
-	{
-		$customer = Customers::findByLicense($license);
-
-		if (!is_null($customer)) {
-
-			$version = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
-
-			if (!is_null($version)) {
 				$vdir = Yii::app()->params['versionsDir'];
 				$archiveName = 'prt+' . $customer->c_id
 							. '_s+' . $version->getStatusNameByLang('en')
@@ -69,7 +38,7 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionLastupdate( $license )
+	public function actionLastupdate($license)
 	{
 		$customer = Customers::findByLicense($license);
 		if ( !is_null($customer) ) {
@@ -99,7 +68,7 @@ class ApiController extends MainController
 	}
 
 
-	protected function sendFile( $file )
+	protected function sendFile($file)
 	{
 		if (file_exists($file)) {
 			// сбрасываем буфер вывода PHP, чтобы избежать переполнения памяти выделенной под скрипт
@@ -122,7 +91,7 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionActivate( $licenseString )
+	public function actionActivate($licenseString)
 	{
 		$parts = explode('hostname', $licenseString);
 		$customersList = Customers::model()->findAll("site=''");
@@ -143,7 +112,7 @@ class ApiController extends MainController
 		}
 	}
 
-	public function actionCheck( $checkString )
+	public function actionCheck($checkString)
 	{
 		$customersList = Customers::model()->findAll();
 		$parts = explode('hostname', $checkString);

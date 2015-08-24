@@ -12,7 +12,7 @@
 			<div class="container">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/">Главная</a>
+					<a class="navbar-brand" href="/site/index">Главная</a>
 				</div>
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -26,9 +26,20 @@
 						<li>
 							<?= Chtml::link("Загрузки", array( 'VersionsDownloads/index' ))?>
 						</li>
+                        <?php if (Yii::app()->user->isGuest) { ?>
 						<li>
-							<?= Chtml::link("Войти", array( 'login' ))?>
+							<?= Chtml::link("Войти", array( 'site/login' ))?>
 						</li>
+                        <?php } ?>
+                        <?php if (!Yii::app()->user->isGuest) { ?>
+                        <li>
+                            <?= Chtml::link("Выйти", array( 'site/logout' ))?>
+                        </li>
+                        <li>
+                            <?= Chtml::link("Изменить пароль", array( 'site/changePassword' ))?>
+                        </li>
+
+                        <?php } ?>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#">Link</a></li>
