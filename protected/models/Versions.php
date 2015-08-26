@@ -31,13 +31,14 @@ class Versions extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, status', 'required'),
-			array('name', 'length', 'max'=>31),
+			array('name', 'length', 'max' => 31),
+			array('db_revert, db_update', 'length', 'max' => 8191),
 			array('name', 'version'),
 			array('status', 'numerical'),
 			array('date', 'now'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('v_id, name, dir, status, date', 'safe', 'on'=>'search'),
+			array('v_id, db_revert, db_update, name, dir, status, date', 'safe', 'on'=>'search'),
 		);
 	}
 

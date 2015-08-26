@@ -10,7 +10,7 @@ return array(
 	'name'=>'Система учета продаж систем учета партнеров',
 
 	// preloading 'log' component
-	'preload'=>array('debug', 'log'),
+	'preload' => array('debug', 'log'),
     //language for project
     'sourceLanguage'=>'en',
     'language'=>'ru',

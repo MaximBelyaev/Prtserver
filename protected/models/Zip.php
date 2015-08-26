@@ -8,6 +8,7 @@ class Zip extends ZipArchive {
 	**/
 	public function addDirectory($dir, $excluse = false)
 	{
+			var_dump($dir);
 		foreach(glob($dir . '/*') as $file)
 		{
 			if( is_dir($file) )

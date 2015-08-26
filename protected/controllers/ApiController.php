@@ -3,6 +3,36 @@
 class ApiController extends MainController
 {
 
+	public function actionDbUpdate($license)
+	{
+		$customer = Customers::findByLicense($license);
+
+		if (!is_null($customer)) {
+
+			$version = Versions::model()->find("status={$customer->status} ORDER BY date DESC");
+
+			if (!is_null($version)) {
+
+				if ( $version->db_update ) {
+					echo json_encode(array(
+						'status' => 'has_update', 
+						'db_update' => $version->db_update,
+						'db_revert' => $version->db_revert,
+					));
+				} else {
+					echo json_encode(array(
+						'status' => 'no_update'
+					));
+
+				}
+
+			}
+
+		}
+
+	}
+
+
 	public function actionUpdate($license)
 	{
 		$customer = Customers::findByLicense($license);
